@@ -1,0 +1,47 @@
+[
+  {
+    "liefnummer": "L-01",
+    "name": "Metallhandel Nord AG",
+    "ort": "Zürich",
+    "lieferzeit_wochen": 2,
+    "bewertung": "A",
+    "erp_nummer": "L01001",
+    "bemerkung": ""
+  },
+  {
+    "liefnummer": "L-02",
+    "name": "Alu Profil AG",
+    "ort": "Basel",
+    "lieferzeit_wochen": 3,
+    "bewertung": "A",
+    "erp_nummer": "L02001",
+    "bemerkung": ""
+  },
+  {
+    "liefnummer": "L-03",
+    "name": "Buntmetall Süd GmbH",
+    "ort": "Bern",
+    "lieferzeit_wochen": 2,
+    "bewertung": "B",
+    "erp_nummer": "L03001",
+    "bemerkung": ""
+  },
+  {
+    "liefnummer": "L-04",
+    "name": "Giesserei Ost AG",
+    "ort": "Chur",
+    "lieferzeit_wochen": 5,
+    "bewertung": "C",
+    "erp_nummer": "L04001",
+    "bemerkung": "Lieferzeit unzuverlässig, immer +1 Wo"
+  },
+  {
+    "liefnummer": "L-05",
+    "name": "Edelstahl Service AG",
+    "ort": "Aarau",
+    "lieferzeit_wochen": 4,
+    "bewertung": "B",
+    "erp_nummer": "L05001",
+    "bemerkung": ""
+  }
+]

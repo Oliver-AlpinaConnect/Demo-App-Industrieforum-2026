@@ -1,0 +1,89 @@
+{% extends "basis.html" %}
+{% import "komponenten/makros.html" as k %}
+
+{% block titel %}Material{% endblock %}
+{% block kicker %}{{ stand.bestellvorschlaege | length }} Bestellpositionen{% endblock %}
+{% block seitentitel %}Material und Bestellvorschlag{% endblock %}
+
+{% block inhalt %}
+
+{% call k.karte("Bedarf je Rohmaterial und Woche (R-022, R-026)") %}
+  <div class="w-full overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-cream text-ink">
+          <th class="px-4 py-3 font-titel text-base text-left">RohNr</th>
+          <th class="px-4 py-3 font-titel text-base text-left">Bezeichnung</th>
+          {% for woche in stand.horizont %}
+            <th class="px-4 py-3 font-titel text-base text-right">{{ woche }}</th>
+          {% endfor %}
+          <th class="px-4 py-3 font-titel text-base text-right">Summe</th>
+          <th class="px-4 py-3 font-titel text-base text-right">Ø Woche</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for zeile in stand.material %}
+          <tr class="border-t border-mist">
+            <td class="px-4 py-3">{{ zeile.rohnummer }}</td>
+            <td class="px-4 py-3">{{ zeile.bezeichnung }}</td>
+            {% for wert in zeile.bedarf_reihe %}
+              <td class="px-4 py-3 text-right">{% if wert > 0 %}{{ wert | menge }}{% else %}<span class="text-mist">0,0</span>{% endif %}</td>
+            {% endfor %}
+            <td class="px-4 py-3 text-right">{{ zeile.summe_horizont | menge }}</td>
+            <td class="px-4 py-3 text-right">{{ zeile.durchschnitt | menge }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endcall %}
+
+{% call k.karte("Bestand, Fehl-KW und Bestellvorschlag (R-023 bis R-032)") %}
+  {% set spalten = [{"titel": "RohNr", "umbruch": true}, {"titel": "Lieferant", "umbruch": true},
+                    {"titel": "Lager", "rechts": true}, {"titel": "bestellt", "rechts": true},
+                    {"titel": "verfügbar", "rechts": true}, {"titel": "Sicherheit", "rechts": true},
+                    "Fehl-KW", "Bestell-KW", {"titel": "Bestellmenge", "rechts": true},
+                    {"titel": "Wert", "rechts": true}, "Bedarfsdatum", "Bestellen?"] %}
+  {% set zeilen = [] %}
+  {% for zeile in stand.material %}
+    {% set _ = zeilen.append({
+      "zellen": [
+        zeile.rohnummer ~ " · " ~ zeile.bezeichnung,
+        zeile.liefnummer ~ " · " ~ zeile.lieferant ~ " (" ~ zeile.lieferzeit_wochen ~ " Wo, " ~ zeile.bewertung.value ~ ")",
+        zeile.lager | menge,
+        zeile.bestellt_offen | menge,
+        zeile.verfuegbar | menge,
+        zeile.sicherheitsbestand | menge,
+        (zeile.fehl_kw | kw) if zeile.fehl_kw else "reicht",
+        (zeile.bestell_kw | kw) if zeile.bestell_kw else "",
+        (zeile.bestellmenge | menge) ~ " " ~ zeile.einheit,
+        zeile.bestellwert | geld,
+        zeile.bedarfsdatum | datum,
+        ("ja, überfällig" if zeile.ueberfaellig else "ja") if zeile.bestellen else "nein",
+      ],
+      "status": "ueberfaellig" if zeile.ueberfaellig else "",
+    }) %}
+  {% endfor %}
+  {{ k.tabelle(spalten, zeilen, "Kein Rohmaterial im Stamm") }}
+  {{ k.hinweis("Sicherheitsbestand " ~ (stand.parameter.zahl("sicherheitsbestand_prozent") | zahl)
+     ~ " % vom Ø-Wochenbedarf, mindestens ein Gebinde (R-025). Lieferanten mit Bewertung C bekommen "
+     ~ (stand.parameter.zahl("puffer_lieferant_c_wochen") | zahl) ~ " Woche Puffer (R-028).") }}
+  {{ k.hinweis("Offene Bestellungen zählen ohne Ankunftswoche als verfügbar, genau wie im Excel. "
+     ~ "Das kann eine Fehl-KW zu spät ausweisen (offene Frage F-10).", "warnung") }}
+{% endcall %}
+
+{% call k.karte("Export nach Abacus (R-033 bis R-036)") %}
+  <p class="text-sm">Dateiname <span class="font-semibold">{{ dateiname }}</span>,
+     {{ exportzeilen_anzahl }} Zeilen, Semikolon getrennt, ANSI, Datum TT.MM.JJJJ,
+     Kostenstelle {{ stand.parameter.ganzzahl("kostenstelle_einkauf") }}.</p>
+  {% for meldung in exportmeldungen %}
+    {{ k.hinweis(meldung, "warnung") }}
+  {% endfor %}
+  {% if exportzeilen_anzahl %}
+    {{ k.knopf("CSV herunterladen", "primaer", "/material/export.csv") }}
+  {% else %}
+    {{ k.leer("Diese Woche ist nichts zu bestellen, es wird keine Datei geschrieben.") }}
+  {% endif %}
+{% endcall %}
+
+{% endblock %}

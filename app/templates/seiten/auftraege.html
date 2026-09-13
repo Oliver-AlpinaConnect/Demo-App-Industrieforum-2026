@@ -1,0 +1,88 @@
+{% extends "basis.html" %}
+{% import "komponenten/makros.html" as k %}
+
+{% block titel %}Aufträge{% endblock %}
+{% block kicker %}{{ zeilen | length }} von {{ stand.auftraege | length }} Aufträgen{% endblock %}
+{% block seitentitel %}Aufträge{% endblock %}
+
+{% block inhalt %}
+
+{% call k.karte("Filter") %}
+  {% call k.formular("/auftraege", "get") %}
+    {{ k.feld("suche", "Suche", filter.suche) }}
+    {{ k.feld("status", "Status", filter.status, statuswerte) }}
+    {{ k.feld("maschine", "Maschine", filter.maschine, maschinenwerte) }}
+    {{ k.feld("woche", "KW eff.", filter.woche, wochenwerte) }}
+    {{ k.knopf("Filtern") }}
+    {{ k.knopf("Zurücksetzen", "sekundaer", "/auftraege") }}
+  {% endcall %}
+{% endcall %}
+
+{% call k.karte("Auftragsliste") %}
+  {% set spalten = ["Auftrag", "Prio", "Artikel", "Material", "Maschine",
+                    {"titel": "Menge", "rechts": true}, "Termin", "Liefer-KW", "Plan-KW", "KW eff.",
+                    {"titel": "Rüstzeit", "rechts": true}, {"titel": "Gesamtzeit", "rechts": true},
+                    "Status", "Bemerkung"] %}
+  {% set tabellenzeilen = [] %}
+  {% for zeile in zeilen %}
+    {% set _ = tabellenzeilen.append({
+      "zellen": [
+        zeile.auftragsnummer,
+        zeile.prioritaet.value,
+        zeile.artikelnummer ~ " · " ~ zeile.bezeichnung,
+        zeile.material,
+        zeile.maschine ~ (" (umgeplant)" if zeile.umgeplant else ""),
+        zeile.menge | zahl,
+        zeile.liefertermin | datum,
+        zeile.liefer_kw | kw,
+        zeile.plan_kw | kw,
+        (zeile.kw_effektiv | kw) ~ (" (manuell)" if zeile.manuelle_kw else "")
+          ~ ("" if zeile.im_horizont or zeile.status.value == "erledigt" else " (ausserhalb Horizont)"),
+        zeile.ruestzeit_min | minuten,
+        zeile.gesamtzeit_h | stunden,
+        zeile.status.value ~ (", überfällig" if zeile.ueberfaellig else ""),
+        zeile.bemerkung | kurz(50),
+      ],
+      "status": "ueberfaellig" if zeile.ueberfaellig else "",
+      "titel": "Bearbeitungszeit " ~ (zeile.bearbeitungszeit_h | stunden)
+               ~ (" · " ~ zeile.bemerkung if zeile.bemerkung else ""),
+    }) %}
+  {% endfor %}
+  {{ k.tabelle(spalten, tabellenzeilen, "Kein Auftrag passt zum Filter") }}
+{% endcall %}
+
+{% call k.karte("Auftrag ändern") %}
+  {{ k.hinweis("Jede Änderung steht mit Person, Zeitpunkt, Feld, altem und neuem Wert im Änderungslog.") }}
+  <div class="grid gap-8 md:grid-cols-2">
+    <div class="flex flex-col gap-4">
+      <h3 class="font-titel text-lg">Abschliessen (R-037)</h3>
+      {% for zeile in zeilen if zeile.status.value != "erledigt" %}
+        {% if loop.index <= 8 %}
+          <form action="/auftraege/{{ zeile.auftragsnummer }}/abschliessen" method="post" class="flex flex-wrap gap-4 items-center">
+            <span class="text-sm">{{ zeile.auftragsnummer }} · {{ zeile.bezeichnung }}</span>
+            {{ k.knopf("erledigt", "sekundaer") }}
+          </form>
+        {% endif %}
+      {% else %}
+        {{ k.leer("Keine offenen Aufträge in der Auswahl") }}
+      {% endfor %}
+    </div>
+    <div class="flex flex-col gap-4">
+      <h3 class="font-titel text-lg">Woche von Hand setzen (R-007)</h3>
+      {% for zeile in zeilen %}
+        {% if loop.index <= 8 %}
+          {% call k.formular("/auftraege/" ~ zeile.auftragsnummer ~ "/woche") %}
+            {{ k.feld("manuelle_kw", zeile.auftragsnummer ~ " · " ~ (zeile.kw_effektiv | kw),
+                      (zeile.manuelle_kw | kw) if zeile.manuelle_kw else "") }}
+            {{ k.knopf("setzen", "sekundaer") }}
+          {% endcall %}
+        {% endif %}
+      {% else %}
+        {{ k.leer("Kein Auftrag in der Auswahl") }}
+      {% endfor %}
+      {{ k.hinweis("Leeres Feld heisst: die Plan-KW gilt wieder.") }}
+    </div>
+  </div>
+{% endcall %}
+
+{% endblock %}

@@ -1,0 +1,97 @@
+{#
+  Layout, Tailwind-Konfiguration und Design-Tokens.
+  Quelle der Farben und Schriften: Alpina Connect Vorlage, siehe CLAUDE.md und docs/design.md.
+  Keine Hex-Farben in den Seiten, nur die Token-Klassen aus dieser Datei.
+#}
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titel %}Produktionsplanung{% endblock %} · Meier Präzisionstechnik AG</title>
+<link rel="icon" href="{{ url_for('static', path='icons/haken.svg') }}">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: { DEFAULT: '#030E4F', 700: '#0C1A5E', 600: '#2A3670' },
+          ink: '#2B3350',
+          accent: '#F49F1C',
+          cream: '#F6F5EC',
+          peach: '#FAEDE6',
+          mist: '#C9CEE0',
+        },
+        fontFamily: {
+          titel: ['"Barlow Condensed"', 'system-ui', 'sans-serif'],
+          text: ['Inter', 'system-ui', 'sans-serif'],
+        },
+        borderRadius: { md: '0.375rem' },
+      },
+    },
+  };
+</script>
+<style type="text/tailwindcss">
+  /* Schriften liegen lokal, kein Aufruf eines externen Font-Servers.
+     Fehlt eine Datei, greift der Fallback system-ui (siehe app/static/fonts/LIESMICH.md). */
+  @font-face {
+    font-family: 'Barlow Condensed';
+    src: url('/static/fonts/BarlowCondensed-SemiBold.woff2') format('woff2');
+    font-weight: 600; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Barlow Condensed';
+    src: url('/static/fonts/BarlowCondensed-Bold.woff2') format('woff2');
+    font-weight: 700; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/Inter-Regular.woff2') format('woff2');
+    font-weight: 400; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/Inter-SemiBold.woff2') format('woff2');
+    font-weight: 600; font-display: swap;
+  }
+  body { @apply font-text text-ink bg-white; }
+  h1, h2, h3 { @apply font-titel; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-white text-ink">
+
+<header class="bg-navy text-white">
+  <div class="px-8 py-6 flex flex-wrap gap-8 items-end justify-between">
+    <div>
+      <p class="text-accent font-titel tracking-widest uppercase text-sm">{% block kicker %}Produktionsplanung{% endblock %}</p>
+      <h1 class="font-titel text-3xl text-white">{% block seitentitel %}Produktionsplanung{% endblock %}</h1>
+    </div>
+    <div class="text-sm text-mist">
+      <p>Aktuelle Woche <span class="text-white">{{ stand.aktuelle_kw }}</span>, Montag {{ stand.aktuelle_kw.montag | datum }}</p>
+      <p>Horizont {{ stand.horizont[0] }} bis {{ stand.horizont[-1] }} ({{ stand.horizont | length }} Wochen)</p>
+    </div>
+  </div>
+  <nav class="px-8 flex flex-wrap gap-4 border-t border-navy-600">
+    {% for eintrag in navigation %}
+      <a href="{{ eintrag.pfad }}"
+         class="py-3 border-b-2 {% if eintrag.pfad == aktive_seite %}border-accent text-white{% else %}border-transparent text-mist hover:text-white{% endif %}">
+        {{ eintrag.titel }}
+      </a>
+    {% endfor %}
+  </nav>
+</header>
+
+<main class="px-8 py-6 flex flex-col gap-8">
+  {% block inhalt %}{% endblock %}
+</main>
+
+<footer class="px-8 py-6 border-t border-mist text-sm text-ink">
+  <p>Ablösung von Produktionsplanung_V7_3.xlsm · Regelkatalog siehe <a class="underline" href="/regeln">Regeln</a> ·
+     angemeldet als {{ benutzer }}</p>
+</footer>
+
+</body>
+</html>

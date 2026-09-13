@@ -1,0 +1,51 @@
+{% extends "basis.html" %}
+{% import "komponenten/makros.html" as k %}
+
+{% block titel %}Regeln{% endblock %}
+{% block kicker %}{{ katalog | length }} Regeln{% endblock %}
+{% block seitentitel %}Regelkatalog{% endblock %}
+
+{% block inhalt %}
+
+{% call k.karte("Regel, Status und Stelle im Code") %}
+  {% set zeilen = [] %}
+  {% for eintrag in katalog %}
+    {% set _ = zeilen.append({
+      "zellen": [
+        eintrag.id,
+        eintrag.titel,
+        eintrag.status,
+        eintrag.modul.replace(".", "/") ~ ".py",
+        eintrag.funktionen | join(", "),
+      ],
+      "status": "",
+    }) %}
+  {% endfor %}
+  {{ k.tabelle(["ID", {"titel": "Regel", "umbruch": true}, "Status im Excel", "Modul",
+                  {"titel": "Funktion", "umbruch": true}], zeilen) }}
+  {{ k.hinweis("Status `aktiv, uneinheitlich` heisst: das Excel rechnet die Regel an mindestens zwei Orten "
+     ~ "unterschiedlich. Die App hat je Regel genau eine Funktion. Was dabei entschieden wurde, steht in "
+     ~ "docs/entscheidungen.md.") }}
+{% endcall %}
+
+{% call k.karte("Katalogtext aus " ~ katalogdatei) %}
+  {% if katalogtext %}
+    <article class="flex flex-col gap-4 leading-relaxed
+                    [&_h1]:font-titel [&_h1]:text-2xl [&_h1]:mt-8
+                    [&_h2]:font-titel [&_h2]:text-xl [&_h2]:mt-8
+                    [&_h3]:font-titel [&_h3]:text-lg
+                    [&_table]:w-full [&_table]:text-sm
+                    [&_th]:bg-cream [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:font-titel
+                    [&_td]:border-t [&_td]:border-mist [&_td]:px-4 [&_td]:py-3 [&_td]:align-top
+                    [&_code]:bg-cream [&_code]:px-4 [&_code]:rounded-md
+                    [&_pre]:bg-cream [&_pre]:p-4 [&_pre]:rounded-md [&_pre]:overflow-x-auto
+                    [&_ul]:list-disc [&_ul]:pl-8 [&_ol]:list-decimal [&_ol]:pl-8
+                    [&_a]:underline">
+      {{ katalogtext | safe }}
+    </article>
+  {% else %}
+    {{ k.leer("Die Datei docs/regeln.md wurde nicht gefunden.") }}
+  {% endif %}
+{% endcall %}
+
+{% endblock %}

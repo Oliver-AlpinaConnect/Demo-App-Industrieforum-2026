@@ -1,0 +1,85 @@
+{% extends "basis.html" %}
+{% import "komponenten/makros.html" as k %}
+
+{% block titel %}Wochenübersicht{% endblock %}
+{% block kicker %}Woche {{ stand.aktuelle_kw }}{% endblock %}
+{% block seitentitel %}Wochenübersicht{% endblock %}
+
+{% block inhalt %}
+
+{# R-038: die sieben Kennzahlen aus dem Blatt Übersicht #}
+<div class="grid gap-4 md:grid-cols-4">
+  {{ k.kennzahl(stand.kennzahlen.offene_auftraege | zahl, "Offene Aufträge", "offen und in Arbeit") }}
+  {{ k.kennzahl(stand.kennzahlen.davon_in_arbeit | zahl, "davon in Arbeit") }}
+  {{ k.kennzahl(stand.kennzahlen.davon_ueberfaellig | zahl, "davon überfällig", "Liefer-KW vor " ~ stand.aktuelle_kw) }}
+  {{ k.kennzahl(stand.kennzahlen.auftraege_aktuelle_kw | zahl, "Aufträge in dieser KW", "nach KW eff.") }}
+  {{ k.kennzahl(stand.kennzahlen.ausserhalb_horizont | zahl, "ausserhalb Horizont", "erscheinen in keiner Planung") }}
+  {{ k.kennzahl(stand.kennzahlen.bestellpositionen | zahl, "Bestellpositionen diese Woche") }}
+  {{ k.kennzahl(stand.kennzahlen.bestellwert | geld, "Bestellwert diese Woche", "CHF") }}
+  {{ k.kennzahl(stand.kennzahlen.bestellpositionen_ueberfaellig | zahl, "davon überfällig", "Bestell-KW schon vorbei") }}
+</div>
+
+<div class="grid gap-8 lg:grid-cols-2">
+
+  {% call k.karte("Auslastung in " ~ stand.aktuelle_kw) %}
+    {% set zeilen = [] %}
+    {% for maschine, zelle in auslastung %}
+      {% set _ = zeilen.append({
+        "zellen": [
+          maschine.kuerzel ~ " " ~ maschine.bezeichnung,
+          zelle.belastung_h | stunden,
+          zelle.kapazitaet_h | stunden ~ (" (Wartung)" if zelle.wartung else ""),
+          (zelle.auslastung | prozent) ~ " · " ~ (zelle.ampel | ampelwort),
+        ],
+        "status": "ueberfaellig" if zelle.ampel.value == "rot" else "",
+      }) %}
+    {% endfor %}
+    {{ k.tabelle(
+        ["Maschine", {"titel": "Belastung", "rechts": true}, {"titel": "Kapazität", "rechts": true}, {"titel": "Auslastung", "rechts": true}],
+        zeilen, "Keine Maschine im Stamm") }}
+    {{ k.hinweis("Grenze " ~ (stand.parameter.anteil("auslastungsgrenze_prozent") | prozent(0)) ~ " (R-017, R-018). Die Farbe steht nie allein, das Wort gehört dazu.") }}
+  {% endcall %}
+
+  {% call k.karte("Überfällige Aufträge (R-009)") %}
+    {% set zeilen = [] %}
+    {% for zeile in stand.ueberfaellige %}
+      {% set _ = zeilen.append({
+        "zellen": [zeile.auftragsnummer, zeile.bezeichnung, zeile.liefer_kw | kw, zeile.liefertermin | datum, "überfällig"],
+        "status": "ueberfaellig",
+      }) %}
+    {% endfor %}
+    {{ k.tabelle(["Auftrag", "Artikel", "Liefer-KW", "Termin", "Status"], zeilen, "Kein Auftrag ist überfällig") }}
+  {% endcall %}
+
+  {% call k.karte("Ausserhalb des Horizonts (R-020)") %}
+    {% set zeilen = [] %}
+    {% for zeile in stand.ausserhalb_horizont %}
+      {% set _ = zeilen.append({
+        "zellen": [zeile.auftragsnummer, zeile.bezeichnung, zeile.kw_effektiv | kw, zeile.gesamtzeit_h | stunden, zeile.bemerkung],
+        "status": "",
+      }) %}
+    {% endfor %}
+    {{ k.tabelle(["Auftrag", "Artikel", "KW eff.", {"titel": "Gesamtzeit", "rechts": true},
+                  {"titel": "Bemerkung", "umbruch": true}], zeilen,
+                 "Alle laufenden Aufträge liegen im Horizont") }}
+    {{ k.hinweis("Diese Aufträge erscheinen in keinem Wochenplan und in keinem Bedarf. Das Excel hat sie nur gezählt.", "warnung") }}
+  {% endcall %}
+
+  {% call k.karte("Bestellvorschlag diese Woche (R-029)") %}
+    {% set zeilen = [] %}
+    {% for zeile in stand.bestellvorschlaege %}
+      {% set _ = zeilen.append({
+        "zellen": [zeile.rohnummer, zeile.bezeichnung, zeile.bestell_kw | kw,
+                   (zeile.bestellmenge | menge) ~ " " ~ zeile.einheit,
+                   zeile.bestellwert | geld,
+                   "überfällig" if zeile.ueberfaellig else "fällig"],
+        "status": "ueberfaellig" if zeile.ueberfaellig else "",
+      }) %}
+    {% endfor %}
+    {{ k.tabelle(["RohNr", "Bezeichnung", "Bestell-KW", {"titel": "Menge", "rechts": true},
+                  {"titel": "Wert", "rechts": true}, "Status"], zeilen, "Diese Woche ist nichts zu bestellen") }}
+    {{ k.knopf("Zur Seite Material", "sekundaer", "/material") }}
+  {% endcall %}
+
+</div>
+{% endblock %}

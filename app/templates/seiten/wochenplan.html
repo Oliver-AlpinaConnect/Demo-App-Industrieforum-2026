@@ -1,0 +1,101 @@
+{% extends "basis.html" %}
+{% import "komponenten/makros.html" as k %}
+
+{% block titel %}Wochenplan{% endblock %}
+{% block kicker %}Horizont {{ stand.horizont | length }} Wochen{% endblock %}
+{% block seitentitel %}Wochenplan{% endblock %}
+
+{% block inhalt %}
+
+{% call k.karte("Belastung, Kapazität und Auslastung je Maschine (R-014 bis R-018)") %}
+  <div class="w-full overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-cream text-ink">
+          <th class="px-4 py-3 font-titel text-base text-left">Maschine</th>
+          <th class="px-4 py-3 font-titel text-base text-left">Wert</th>
+          {% for woche in stand.horizont %}
+            <th class="px-4 py-3 font-titel text-base text-right">{{ woche }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for maschine in stand.maschinen %}
+          <tr class="border-t border-mist">
+            <td class="px-4 py-3 align-top" rowspan="3">
+              <span class="font-titel text-base">{{ maschine.kuerzel }}</span><br>
+              <span class="text-sm">{{ maschine.bezeichnung }}</span><br>
+              <span class="text-sm">Verfügbarkeit {{ (maschine.verfuegbarkeit_prozent / 100) | prozent(0) }}</span><br>
+              <span class="text-sm">{% if maschine.wartungs_kw %}Wartung {{ maschine.wartungs_kw }}{% else %}keine Wartung im Horizont{% endif %}</span>
+            </td>
+            <td class="px-4 py-3">Belastung</td>
+            {% for zelle in maschine.zellen %}
+              <td class="px-4 py-3 text-right">{{ zelle.belastung_h | stunden }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <td class="px-4 py-3">Kapazität</td>
+            {% for zelle in maschine.zellen %}
+              <td class="px-4 py-3 text-right">{{ zelle.kapazitaet_h | stunden }}{% if zelle.wartung %} <span class="text-sm">Wartung</span>{% endif %}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <td class="px-4 py-3">Auslastung</td>
+            {% for zelle in maschine.zellen %}
+              <td class="px-4 py-3 text-right {% if zelle.ampel.value == 'rot' %}bg-peach text-ink{% endif %}">
+                <span class="{% if zelle.ampel.value == 'rot' %}font-semibold{% endif %}">{{ zelle.auslastung | prozent }}</span><br>
+                <span class="text-sm">{{ zelle.ampel | ampelwort }}</span>
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {{ k.hinweis("Auslastungsgrenze " ~ (stand.parameter.anteil("auslastungsgrenze_prozent") | prozent(0))
+     ~ ", Wartungsabzug " ~ (stand.parameter.zahl("wartungsabzug_h") | zahl) ~ " h. Beide stehen in den Parametern (R-001).") }}
+{% endcall %}
+
+{% call k.karte("Verschiebevorschläge (R-021)") %}
+  {% set zeilen = [] %}
+  {% for vorschlag in vorschlaege %}
+    {% set _ = zeilen.append({
+      "zellen": [vorschlag.auftragsnummer, vorschlag.maschine, vorschlag.von_kw | kw, vorschlag.nach_kw | kw, vorschlag.grund],
+      "status": "",
+    }) %}
+  {% endfor %}
+  {{ k.tabelle(["Auftrag", "Maschine", "von", "nach", {"titel": "Grund", "umbruch": true}], zeilen,
+               "Keine Woche liegt über der Auslastungsgrenze, es gibt nichts zu verschieben") }}
+  {% if vorschlaege %}
+    <form action="/wochenplan/uebernehmen" method="post" class="flex gap-4">
+      {{ k.knopf("Vorschläge als manuelle KW übernehmen") }}
+    </form>
+    {{ k.hinweis("Die App verschiebt nie von selbst. Sie rechnet den Vorschlag, übernehmen tut ihn ein Mensch. "
+       ~ "Priorität A und Aufträge in Arbeit werden nie verschoben, und nichts wird über das Horizontende hinausgeschoben.", "warnung") }}
+  {% endif %}
+{% endcall %}
+
+{% call k.karte("Aufträge je Maschine und Woche (R-016)") %}
+  <div class="flex flex-col gap-8">
+    {% for maschine in stand.maschinen %}
+      <div class="flex flex-col gap-4">
+        <h3 class="font-titel text-lg">{{ maschine.kuerzel }} · {{ maschine.bezeichnung }}</h3>
+        <div class="grid gap-4 md:grid-cols-4">
+          {% for woche in stand.horizont %}
+            {% set liste = auftraege_nach_woche[(maschine.kuerzel, woche)] %}
+            <div class="border border-mist rounded-md p-4 flex flex-col gap-4">
+              <span class="font-titel text-base">{{ woche }}</span>
+              {% for auftrag in liste %}
+                <span class="text-sm">{{ auftrag.auftragsnummer }} · Prio {{ auftrag.prioritaet.value }} · {{ auftrag.gesamtzeit_h | stunden }}</span>
+              {% else %}
+                <span class="text-sm">nichts geplant</span>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endcall %}
+
+{% endblock %}

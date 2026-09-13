@@ -1,0 +1,178 @@
+[
+  {
+    "artikelnummer": "A-1001",
+    "position": 1,
+    "rohnummer": "RM-101",
+    "menge_je_stueck": "0.0400",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1002",
+    "position": 1,
+    "rohnummer": "RM-112",
+    "menge_je_stueck": "0.0100",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1003",
+    "position": 1,
+    "rohnummer": "RM-113",
+    "menge_je_stueck": "0.0250",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1004",
+    "position": 1,
+    "rohnummer": "RM-103",
+    "menge_je_stueck": "0.0200",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1005",
+    "position": 1,
+    "rohnummer": "RM-106",
+    "menge_je_stueck": "0.0140",
+    "verschnitt_prozent": "8",
+    "bemerkung": "Alu: Verschnitt 8% wg. Planfräsen"
+  },
+  {
+    "artikelnummer": "A-1006",
+    "position": 1,
+    "rohnummer": "RM-107",
+    "menge_je_stueck": "0.0520",
+    "verschnitt_prozent": "10",
+    "bemerkung": "Alu-Platte: Verschnitt 10%"
+  },
+  {
+    "artikelnummer": "A-1007",
+    "position": 1,
+    "rohnummer": "RM-102",
+    "menge_je_stueck": "0.0500",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1008",
+    "position": 1,
+    "rohnummer": "RM-104",
+    "menge_je_stueck": "0.0250",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1009",
+    "position": 1,
+    "rohnummer": "RM-109",
+    "menge_je_stueck": "1.0000",
+    "verschnitt_prozent": "0",
+    "bemerkung": "Guss-Rohling, kein Verschnitt"
+  },
+  {
+    "artikelnummer": "A-1010",
+    "position": 1,
+    "rohnummer": "RM-107",
+    "menge_je_stueck": "0.0200",
+    "verschnitt_prozent": "10",
+    "bemerkung": "Alu-Platte: Verschnitt 10%"
+  },
+  {
+    "artikelnummer": "A-1011",
+    "position": 1,
+    "rohnummer": "RM-101",
+    "menge_je_stueck": "0.0300",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1012",
+    "position": 1,
+    "rohnummer": "RM-114",
+    "menge_je_stueck": "0.0080",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1013",
+    "position": 1,
+    "rohnummer": "RM-105",
+    "menge_je_stueck": "0.0150",
+    "verschnitt_prozent": "8",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1014",
+    "position": 1,
+    "rohnummer": "RM-105",
+    "menge_je_stueck": "0.0100",
+    "verschnitt_prozent": "8",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1015",
+    "position": 1,
+    "rohnummer": "RM-108",
+    "menge_je_stueck": "0.0300",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1016",
+    "position": 1,
+    "rohnummer": "RM-115",
+    "menge_je_stueck": "0.0300",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1017",
+    "position": 1,
+    "rohnummer": "RM-110",
+    "menge_je_stueck": "1.0000",
+    "verschnitt_prozent": "0",
+    "bemerkung": "Guss-Rohling, kein Verschnitt"
+  },
+  {
+    "artikelnummer": "A-1018",
+    "position": 1,
+    "rohnummer": "RM-105",
+    "menge_je_stueck": "0.0150",
+    "verschnitt_prozent": "8",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-1019",
+    "position": 1,
+    "rohnummer": "RM-109",
+    "menge_je_stueck": "1.0000",
+    "verschnitt_prozent": "0",
+    "bemerkung": "Gehäuse"
+  },
+  {
+    "artikelnummer": "A-1019",
+    "position": 2,
+    "rohnummer": "RM-110",
+    "menge_je_stueck": "1.0000",
+    "verschnitt_prozent": "0",
+    "bemerkung": "Deckel"
+  },
+  {
+    "artikelnummer": "A-1020",
+    "position": 1,
+    "rohnummer": "RM-111",
+    "menge_je_stueck": "0.0600",
+    "verschnitt_prozent": "5",
+    "bemerkung": ""
+  },
+  {
+    "artikelnummer": "A-0998",
+    "position": 1,
+    "rohnummer": "RM-103",
+    "menge_je_stueck": "0.0350",
+    "verschnitt_prozent": "5",
+    "bemerkung": "alt"
+  }
+]
