@@ -1,0 +1,86 @@
+[
+  {
+    "name": "sicherheitsbestand_prozent",
+    "wert": "10",
+    "beschriftung": "Sicherheitsbestand",
+    "einheit": "%"
+  },
+  {
+    "name": "auslastungsgrenze_prozent",
+    "wert": "90",
+    "beschriftung": "Auslastungsgrenze",
+    "einheit": "%"
+  },
+  {
+    "name": "ruestzuschlag_alu_min",
+    "wert": "40",
+    "beschriftung": "Rüstzuschlag Alu",
+    "einheit": "min"
+  },
+  {
+    "name": "losgrenze_alu_stk",
+    "wert": "500",
+    "beschriftung": "Losgrenze Alu",
+    "einheit": "Stk"
+  },
+  {
+    "name": "schichten_pro_tag",
+    "wert": "2",
+    "beschriftung": "Schichten pro Tag",
+    "einheit": ""
+  },
+  {
+    "name": "stunden_pro_schicht",
+    "wert": "8.0",
+    "beschriftung": "Std pro Schicht",
+    "einheit": "h"
+  },
+  {
+    "name": "arbeitstage_pro_woche",
+    "wert": "5",
+    "beschriftung": "Arbeitstage pro Woche",
+    "einheit": ""
+  },
+  {
+    "name": "puffer_lieferant_c_wochen",
+    "wert": "1",
+    "beschriftung": "Puffer Lieferant C",
+    "einheit": "Wochen"
+  },
+  {
+    "name": "kostenstelle_einkauf",
+    "wert": "4100",
+    "beschriftung": "Kostenstelle Einkauf",
+    "einheit": ""
+  },
+  {
+    "name": "planungshorizont_wochen",
+    "wert": "8",
+    "beschriftung": "Planungshorizont",
+    "einheit": "Wochen"
+  },
+  {
+    "name": "wartungsabzug_h",
+    "wert": "16",
+    "beschriftung": "Wartungsabzug",
+    "einheit": "h"
+  },
+  {
+    "name": "vorlauf_prio_a_wochen",
+    "wert": "2",
+    "beschriftung": "Vorlauf Prio A",
+    "einheit": "Wochen"
+  },
+  {
+    "name": "vorlauf_prio_b_wochen",
+    "wert": "1",
+    "beschriftung": "Vorlauf Prio B",
+    "einheit": "Wochen"
+  },
+  {
+    "name": "vorlauf_prio_c_wochen",
+    "wert": "1",
+    "beschriftung": "Vorlauf Prio C",
+    "einheit": "Wochen"
+  }
+]

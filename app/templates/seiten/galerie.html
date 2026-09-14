@@ -1,0 +1,64 @@
+{% extends "basis.html" %}
+{% import "komponenten/makros.html" as k %}
+
+{% block titel %}Galerie{% endblock %}
+{% block kicker %}Bausteine{% endblock %}
+{% block seitentitel %}Galerie der Komponenten{% endblock %}
+
+{% block inhalt %}
+
+{{ k.hinweis("Jedes Makro aus templates/komponenten/makros.html einmal. Beschreibung in docs/design.md.") }}
+
+{% call k.karte("kennzahl") %}
+  <div class="grid gap-4 md:grid-cols-3">
+    {{ k.kennzahl("47", "Offene Aufträge", "offen und in Arbeit") }}
+    {{ k.kennzahl("1'329", "Stück geplant") }}
+    {{ k.kennzahl("58,8 %", "Auslastung M1", "unter der Grenze") }}
+  </div>
+{% endcall %}
+
+{% call k.karte("tabelle, auch mit Zeilenstatus") %}
+  {{ k.tabelle(
+      ["Auftrag", "Artikel", {"titel": "Menge", "rechts": true}, "Status"],
+      [
+        {"zellen": ["26-0414", "A-1005 Flansch DN50 Alu", "620", "offen"], "status": ""},
+        {"zellen": ["26-0402", "A-1007 Welle Ø40x300 S235JR", "180", "offen, überfällig"], "status": "ueberfaellig"},
+      ]) }}
+{% endcall %}
+
+{% call k.karte("knopf") %}
+  <div class="flex flex-wrap gap-4">
+    {{ k.knopf("Primäraktion") }}
+    {{ k.knopf("Sekundär", "sekundaer") }}
+    {{ k.knopf("Link als Knopf", "sekundaer", "/regeln") }}
+  </div>
+{% endcall %}
+
+{% call k.karte("hinweis und leer") %}
+  {{ k.hinweis("Info: der Horizont läuft über acht Wochen.") }}
+  {{ k.hinweis("Warnung: zwei Aufträge liegen ausserhalb des Horizonts.", "warnung") }}
+  {{ k.leer("Hier ist noch nichts.") }}
+{% endcall %}
+
+{% call k.karte("formular und feld") %}
+  {% call k.formular("/galerie", "get") %}
+    {{ k.feld("suche", "Suche", "") }}
+    {{ k.feld("status", "Status", "offen", [("offen", "offen"), ("in Arbeit", "in Arbeit"), ("erledigt", "erledigt")]) }}
+    {{ k.knopf("Filtern") }}
+  {% endcall %}
+{% endcall %}
+
+{% call k.karte("tabs") %}
+  {{ k.tabs([{"pfad": "/galerie", "titel": "Bausteine"}, {"pfad": "/regeln", "titel": "Regeln"}], "/galerie") }}
+{% endcall %}
+
+{% call k.karte("ampelzelle (R-018)") %}
+  <div class="flex flex-wrap gap-4">
+    {{ k.ampelzelle("94,7 %", "rot", "über Grenze") }}
+    {{ k.ampelzelle("86,7 %", "gelb", "hoch") }}
+    {{ k.ampelzelle("29,2 %", "gruen", "frei") }}
+    {{ k.ampelzelle("58,8 %", "neutral", "normal") }}
+  </div>
+{% endcall %}
+
+{% endblock %}

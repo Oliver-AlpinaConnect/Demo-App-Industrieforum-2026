@@ -1,0 +1,212 @@
+[
+  {
+    "artikelnummer": "A-1001",
+    "bezeichnung": "Welle Ø25x200 S235JR",
+    "material": "S235JR",
+    "standardmaschine": "M1",
+    "minuten_je_stueck": "6.0",
+    "ruestzeit_basis_min": 30,
+    "zeichnung": "Z-1001",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1002",
+    "bezeichnung": "Buchse Messing 20x30",
+    "material": "Messing",
+    "standardmaschine": "M2",
+    "minuten_je_stueck": "2.5",
+    "ruestzeit_basis_min": 20,
+    "zeichnung": "Z-1002",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1003",
+    "bezeichnung": "Bolzen 42CrMo4 M12",
+    "material": "42CrMo4",
+    "standardmaschine": "M1",
+    "minuten_je_stueck": "5.0",
+    "ruestzeit_basis_min": 45,
+    "zeichnung": "Z-1003",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1004",
+    "bezeichnung": "Ring 1.4301 D60",
+    "material": "1.4301",
+    "standardmaschine": "M2",
+    "minuten_je_stueck": "3.0",
+    "ruestzeit_basis_min": 35,
+    "zeichnung": "Z-1004",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1005",
+    "bezeichnung": "Flansch DN50 Alu",
+    "material": "Alu",
+    "standardmaschine": "M3",
+    "minuten_je_stueck": "4.0",
+    "ruestzeit_basis_min": 50,
+    "zeichnung": "Z-1005",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1006",
+    "bezeichnung": "Deckel Alu D120",
+    "material": "Alu",
+    "standardmaschine": "M3",
+    "minuten_je_stueck": "5.5",
+    "ruestzeit_basis_min": 60,
+    "zeichnung": "Z-1006",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1007",
+    "bezeichnung": "Welle Ø40x300 S235JR",
+    "material": "S235JR",
+    "standardmaschine": "M1",
+    "minuten_je_stueck": "9.0",
+    "ruestzeit_basis_min": 40,
+    "zeichnung": "Z-1007",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1008",
+    "bezeichnung": "Halter 1.4301",
+    "material": "1.4301",
+    "standardmaschine": "M4",
+    "minuten_je_stueck": "7.5",
+    "ruestzeit_basis_min": 55,
+    "zeichnung": "Z-1008",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1009",
+    "bezeichnung": "Gehäuse G12 GG25",
+    "material": "GG25",
+    "standardmaschine": "M4",
+    "minuten_je_stueck": "18.0",
+    "ruestzeit_basis_min": 120,
+    "zeichnung": "Z-1009",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1010",
+    "bezeichnung": "Adapter Alu 60x60",
+    "material": "Alu",
+    "standardmaschine": "M2",
+    "minuten_je_stueck": "1.2",
+    "ruestzeit_basis_min": 45,
+    "zeichnung": "Z-1010",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1011",
+    "bezeichnung": "Zapfen S235JR",
+    "material": "S235JR",
+    "standardmaschine": "M1",
+    "minuten_je_stueck": "4.5",
+    "ruestzeit_basis_min": 25,
+    "zeichnung": "Z-1011",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1012",
+    "bezeichnung": "Scheibe Messing D40",
+    "material": "Messing",
+    "standardmaschine": "M2",
+    "minuten_je_stueck": "1.5",
+    "ruestzeit_basis_min": 15,
+    "zeichnung": "Z-1012",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1013",
+    "bezeichnung": "Buchse Alu D25",
+    "material": "Alu",
+    "standardmaschine": "M2",
+    "minuten_je_stueck": "4.0",
+    "ruestzeit_basis_min": 30,
+    "zeichnung": "Z-1013",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1014",
+    "bezeichnung": "Hülse Alu D30",
+    "material": "Alu",
+    "standardmaschine": "M3",
+    "minuten_je_stueck": "2.0",
+    "ruestzeit_basis_min": 35,
+    "zeichnung": "Z-1014",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1015",
+    "bezeichnung": "Stutzen 1.4404",
+    "material": "1.4404",
+    "standardmaschine": "M2",
+    "minuten_je_stueck": "6.5",
+    "ruestzeit_basis_min": 50,
+    "zeichnung": "Z-1015",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1016",
+    "bezeichnung": "Distanzstück Alu",
+    "material": "Alu",
+    "standardmaschine": "M2",
+    "minuten_je_stueck": "1.5",
+    "ruestzeit_basis_min": 40,
+    "zeichnung": "Z-1016",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1017",
+    "bezeichnung": "Deckel GG25 bearbeitet",
+    "material": "GG25",
+    "standardmaschine": "M3",
+    "minuten_je_stueck": "5.5",
+    "ruestzeit_basis_min": 60,
+    "zeichnung": "Z-1017",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1018",
+    "bezeichnung": "Winkel Alu 80",
+    "material": "Alu",
+    "standardmaschine": "M1",
+    "minuten_je_stueck": "3.5",
+    "ruestzeit_basis_min": 30,
+    "zeichnung": "Z-1018",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1019",
+    "bezeichnung": "Lagerbock GG25 kompl.",
+    "material": "GG25",
+    "standardmaschine": "M4",
+    "minuten_je_stueck": "22.0",
+    "ruestzeit_basis_min": 150,
+    "zeichnung": "Z-1019",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-1020",
+    "bezeichnung": "Konsole S235JR",
+    "material": "S235JR",
+    "standardmaschine": "M4",
+    "minuten_je_stueck": "8.0",
+    "ruestzeit_basis_min": 60,
+    "zeichnung": "Z-1020",
+    "aktiv": true
+  },
+  {
+    "artikelnummer": "A-0998",
+    "bezeichnung": "Welle Ø20x180 1.4301 (alt)",
+    "material": "1.4301",
+    "standardmaschine": "M1",
+    "minuten_je_stueck": "5.0",
+    "ruestzeit_basis_min": 30,
+    "zeichnung": "Z-0998",
+    "aktiv": false
+  }
+]

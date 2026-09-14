@@ -1,0 +1,34 @@
+[
+  {
+    "kuerzel": "M1",
+    "bezeichnung": "DMG CTX beta 800 (Drehen)",
+    "verfuegbarkeit_prozent": "85",
+    "wartung_jahr": 2026,
+    "wartung_woche": 41,
+    "bemerkung": ""
+  },
+  {
+    "kuerzel": "M2",
+    "bezeichnung": "Mazak QT-250 (Drehen)",
+    "verfuegbarkeit_prozent": "85",
+    "wartung_jahr": 2026,
+    "wartung_woche": 44,
+    "bemerkung": ""
+  },
+  {
+    "kuerzel": "M3",
+    "bezeichnung": "Hermle C 22 (5-Achs)",
+    "verfuegbarkeit_prozent": "80",
+    "wartung_jahr": null,
+    "wartung_woche": null,
+    "bemerkung": "Verfügbarkeit tiefer wg. Einfahren neue Aufträge"
+  },
+  {
+    "kuerzel": "M4",
+    "bezeichnung": "Fräszentrum Haas VF-3",
+    "verfuegbarkeit_prozent": "90",
+    "wartung_jahr": 2026,
+    "wartung_woche": 43,
+    "bemerkung": ""
+  }
+]

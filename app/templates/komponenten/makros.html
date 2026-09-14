@@ -1,0 +1,116 @@
+{#
+  Die Bausteine aller Seiten. Tailwind-Klassen stehen nur hier drin, in den Seiten nur
+  Layout (grid, flex, gap-*, p-*, m-*, w-*). Beispiele: /galerie, Beschreibung: docs/design.md.
+#}
+
+{% macro kennzahl(wert, beschriftung, hinweis="") %}
+<div class="bg-cream rounded-md p-4 flex flex-col gap-4">
+  <span class="font-titel text-3xl text-ink">{{ wert }}</span>
+  <span class="text-sm text-ink">{{ beschriftung }}</span>
+  {% if hinweis %}<span class="text-sm text-ink">{{ hinweis }}</span>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro karte(titel) %}
+<section class="border border-mist rounded-md">
+  <h2 class="font-titel text-xl bg-cream text-ink px-4 py-3 rounded-t-md">{{ titel }}</h2>
+  <div class="p-4 flex flex-col gap-4">{{ caller() }}</div>
+</section>
+{% endmacro %}
+
+{#
+  spalten: Liste von Beschriftungen oder {titel, rechts, umbruch}
+           rechts   = Zahlenspalte, rechtsbündig
+           umbruch  = langer Text, darf umbrechen (sonst bleibt die Zelle einzeilig)
+  zeilen:  Liste von {zellen: [...], status: "" | "ueberfaellig" | "ausgewaehlt", titel: ""}
+#}
+{% macro tabelle(spalten, zeilen, leertext="Keine Einträge") %}
+{% if zeilen %}
+<div class="w-full overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-cream text-ink">
+        {% for spalte in spalten %}
+          <th class="px-4 py-3 font-titel text-base whitespace-nowrap {% if spalte.rechts %}text-right{% else %}text-left{% endif %}">
+            {{ spalte.titel if spalte.titel is defined else spalte }}
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for zeile in zeilen %}
+        <tr class="border-t border-mist {% if zeile.status in ('ueberfaellig', 'ausgewaehlt') %}bg-peach text-ink{% endif %}"
+            {% if zeile.titel %}title="{{ zeile.titel }}"{% endif %}>
+          {% for zelle in zeile.zellen %}
+            {% set spalte = spalten[loop.index0] %}
+            <td class="px-4 py-3 align-top
+                       {% if spalte.rechts is defined and spalte.rechts %}text-right{% endif %}
+                       {% if not (spalte.umbruch is defined and spalte.umbruch) %}whitespace-nowrap{% endif %}">
+              {{ zelle }}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  {{ leer(leertext) }}
+{% endif %}
+{% endmacro %}
+
+{% macro knopf(text, art="primaer", ziel="", typ="submit", name="", wert="") %}
+{% if ziel %}
+<a href="{{ ziel }}" class="inline-block rounded-md px-4 py-3 {% if art == 'primaer' %}bg-navy text-white{% else %}bg-cream text-ink border border-mist{% endif %}">{{ text }}</a>
+{% else %}
+<button type="{{ typ }}" {% if name %}name="{{ name }}" value="{{ wert }}"{% endif %}
+        class="rounded-md px-4 py-3 {% if art == 'primaer' %}bg-navy text-white{% else %}bg-cream text-ink border border-mist{% endif %}">{{ text }}</button>
+{% endif %}
+{% endmacro %}
+
+{% macro hinweis(text, art="info") %}
+<p class="rounded-md px-4 py-3 text-sm text-ink {% if art == 'warnung' %}bg-peach{% else %}bg-cream{% endif %}">{{ text }}</p>
+{% endmacro %}
+
+{% macro leer(text) %}
+<p class="rounded-md border border-mist px-4 py-3 text-sm text-ink">{{ text }}</p>
+{% endmacro %}
+
+{% macro formular(aktion, verfahren="post") %}
+<form action="{{ aktion }}" method="{{ verfahren }}" class="flex flex-wrap gap-4 items-end">{{ caller() }}</form>
+{% endmacro %}
+
+{% macro feld(name, beschriftung, wert="", auswahl=none, typ="text") %}
+<label class="flex flex-col gap-4 text-sm text-ink">
+  <span>{{ beschriftung }}</span>
+  {% if auswahl is not none %}
+    <select name="{{ name }}" class="rounded-md border border-mist px-4 py-3 bg-white text-ink">
+      {% for schluessel, text in auswahl %}
+        <option value="{{ schluessel }}" {% if schluessel == wert %}selected{% endif %}>{{ text }}</option>
+      {% endfor %}
+    </select>
+  {% else %}
+    <input type="{{ typ }}" name="{{ name }}" value="{{ wert }}"
+           class="rounded-md border border-mist px-4 py-3 bg-white text-ink">
+  {% endif %}
+</label>
+{% endmacro %}
+
+{% macro tabs(eintraege, aktiv) %}
+<nav class="flex flex-wrap gap-4 border-b border-mist">
+  {% for eintrag in eintraege %}
+    <a href="{{ eintrag.pfad }}"
+       class="py-3 border-b-2 {% if eintrag.pfad == aktiv %}border-accent text-ink{% else %}border-transparent text-ink{% endif %}">
+      {{ eintrag.titel }}
+    </a>
+  {% endfor %}
+</nav>
+{% endmacro %}
+
+{#  Ampel nach R-018: Farbe nie allein, das Wort steht immer dabei. #}
+{% macro ampelzelle(wert_text, stufe, wort) %}
+<span class="inline-flex flex-col gap-4 {% if stufe == 'rot' %}bg-peach{% endif %} rounded-md px-4 py-3">
+  <span class="{% if stufe == 'rot' %}font-semibold{% endif %}">{{ wert_text }}</span>
+  <span class="text-sm">{{ wort }}</span>
+</span>
+{% endmacro %}
