@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Produktionsplanung und Materialdisposition, Ablösung von Produktionsplanung_V7_3.xlsm"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.115",
+    # "standard" bringt die fastapi-CLI mit, die in den Befehlen steht
+    # (uv run fastapi dev app/main.py) sowie uvicorn und python-multipart.
+    "fastapi[standard]>=0.115",
     "uvicorn[standard]>=0.32",
     "sqlalchemy>=2.0",
     "pydantic>=2.9",

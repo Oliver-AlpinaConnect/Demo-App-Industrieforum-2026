@@ -29,6 +29,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.datenbank import Sitzung, tabellen_anlegen
@@ -304,16 +305,23 @@ def _stueckliste(blatt, sitzung: Session, bericht: Importbericht, artikelnummern
             continue
         position = int(_zahl(zeile[2]))
         je_artikel[artikelnummer] = je_artikel.get(artikelnummer, 0) + 1
-        sitzung.merge(
-            Stuecklistenposition(
-                artikelnummer=artikelnummer,
-                position=position,
-                rohnummer=_text(zeile[3]),
-                menge_je_stueck=_zahl(zeile[4]),
-                verschnitt_prozent=_prozent(zeile[5]) if _zahl(zeile[5]) <= 1 else _zahl(zeile[5]),
-                bemerkung=_text(zeile[6]),
+        verschnitt = _prozent(zeile[5]) if _zahl(zeile[5]) <= 1 else _zahl(zeile[5])
+
+        # Der Schlüssel der Zeile ist (Artikel, Position), nicht die laufende id.
+        # Ohne diese Suche legt ein zweiter Import dieselbe Position noch einmal an.
+        vorhanden = sitzung.scalar(
+            select(Stuecklistenposition).where(
+                Stuecklistenposition.artikelnummer == artikelnummer,
+                Stuecklistenposition.position == position,
             )
         )
+        if vorhanden is None:
+            vorhanden = Stuecklistenposition(artikelnummer=artikelnummer, position=position)
+            sitzung.add(vorhanden)
+        vorhanden.rohnummer = _text(zeile[3])
+        vorhanden.menge_je_stueck = _zahl(zeile[4])
+        vorhanden.verschnitt_prozent = verschnitt
+        vorhanden.bemerkung = _text(zeile[6])
         gelesen += 1
     for artikelnummer, anzahl in je_artikel.items():
         if anzahl > 2:

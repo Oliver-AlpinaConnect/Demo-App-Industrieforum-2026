@@ -12,7 +12,14 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 from app.import_excel import lies_excel
-from app.modelle import Artikel, Auftrag, Basis, Parametersatz, Rohmaterial
+from app.modelle import (
+    Artikel,
+    Auftrag,
+    Basis,
+    Parametersatz,
+    Rohmaterial,
+    Stuecklistenposition,
+)
 
 
 def _mappe(pfad: Path) -> Path:
@@ -288,6 +295,22 @@ def test_import_uebernimmt_export_pfad_und_aktuelle_kw_nicht(bericht_und_sitzung
     namen = {satz.name for satz in sitzung.scalars(select(Parametersatz)).all()}
     assert "export_pfad" not in namen
     assert "aktuelle_kw" not in namen
+
+
+def test_import_laesst_sich_wiederholen(tmp_path):
+    """Ein zweiter Lauf aktualisiert, er legt nicht noch einmal an."""
+    datei = _mappe(tmp_path)
+    maschine = create_engine("sqlite://")
+    Basis.metadata.create_all(maschine)
+    fabrik = sessionmaker(bind=maschine, expire_on_commit=False)
+    with fabrik() as sitzung:
+        lies_excel(datei, sitzung)
+        sitzung.commit()
+        lies_excel(datei, sitzung)
+        sitzung.commit()
+        positionen = sitzung.scalars(select(Stuecklistenposition)).all()
+        assert len(positionen) == 3
+        assert len(sitzung.scalars(select(Auftrag)).all()) == 2
 
 
 def test_import_liest_verschnitt_und_stueckliste(bericht_und_sitzung):
